@@ -1,0 +1,220 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "REST API POSNES",
+        "description": "<html><body>Documentacion del proyecto <b>POSNES</b></body></html>",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "host": "localhost:3000",
+    "basePath": "",
+    "tags": [
+        {
+            "name": "Login",
+            "description": "Endpoints para el login de usuarios"
+        },
+        {
+            "name": "Institutos",
+            "description": "API para obtener información de los institutos del sistema POSNES"
+        }
+    ],
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/api/login/validateCredentials": {
+            "post": {
+                "tags": ["Autenticación"],
+                "summary": "Validar credenciales de usuario",
+                "operationId": "validateCredentials",
+                "description": "Este endpoint valida el correo y la contraseña de un usuario y devuelve un token JWT junto con la información básica del usuario y la URL de redirección.",
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "Credenciales",
+                        "in": "body",
+                        "description": "Credenciales del usuario",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Credentials"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Autenticación exitosa",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Autenticación exitosa"
+                                        },
+                                        "user": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 250,
+                                                    "description": "ID del usuario autenticado."
+                                                },
+                                                "nombre": {
+                                                    "type": "string",
+                                                    "example": "Coordinador Maestría en Diseño de Muebles",
+                                                    "description": "Nombre del usuario."
+                                                },
+                                                "correo": {
+                                                    "type": "string",
+                                                    "example": "christoph.mcgarrity@hotmail.fr",
+                                                    "description": "Correo del usuario autenticado."
+                                                },
+                                                "nivel": {
+                                                    "type": "integer",
+                                                    "example": 3,
+                                                    "description": "Nivel de acceso del usuario."
+                                                }
+                                            }
+                                        },
+                                        "redirectUrl": {
+                                            "type": "string",
+                                            "example": "/coordinador/inicio",
+                                            "description": "URL a la que debe redirigirse el usuario según su nivel de acceso."
+                                        },
+                                        "token": {
+                                            "type": "string",
+                                            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI...",
+                                            "description": "Token JWT válido por 1 hora."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Solicitud incorrecta - Falta correo o contraseña",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Correo y contraseña son requeridos"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Credenciales incorrectas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Correo o contraseña incorrectos"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Error en el servidor"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/institutos/": {
+            "get": {
+                "tags": ["Institutos"],
+                "summary": "Listar todos los institutos",
+                "description": "Listar todos los institutos del sistema POSNES",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "codigo": "002",
+                                    "nombre": "Instituto de computación"
+                                }
+                            ]
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/Institutos"
+                        }
+                    },
+                    "404": {
+                        "description": "Institutos no encontrados"
+                    }
+                }
+            },
+            "parameters": [{
+                    "description": "apiKey",
+                    "type": "string",
+                    "in": "header",
+                    "name": "Authorization"
+                }]
+        }
+    },
+    "definitions": {
+        "Credentials": {
+            "type": "object",
+            "properties": {
+                "correo": {
+                    "type": "string",
+                    "example": "christoph.mcgarrity@hotmail.fr"
+                },
+                "password": {
+                    "type": "string",
+                    "example": "x"
+                }
+            }
+        },
+        "Institutos": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "codigo": {
+                        "type": "string",
+                        "example": "002"
+                    },
+                    "nombre": {
+                        "type": "string",
+                        "example": "Instituto de computación"
+                    }
+                }
+            }
+        }
+    }
+}
