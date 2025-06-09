@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:ventas_app/providers/cart_provider.dart';
+import 'package:ventas_app/providers/user_provider.dart';
 import 'package:ventas_app/screens/cart_screen.dart';
 import 'package:ventas_app/screens/favorites_screen.dart';
 import 'package:ventas_app/screens/products_screen.dart';
@@ -21,6 +23,8 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ProductProvider()),
+        ChangeNotifierProvider(create: (_) => CartProvider()),
+        ChangeNotifierProvider(create: (_) => UserProvider()),
       ],
       child: MaterialApp(
         title: 'Proyecto - Parcial III',
@@ -28,9 +32,17 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 162, 217, 203)),
           useMaterial3: true,
           scaffoldBackgroundColor: const Color.fromARGB(255, 93, 109, 126), // Fondo general
+
+          scrollbarTheme: ScrollbarThemeData(
+            thumbVisibility: MaterialStateProperty.all(true),
+            thumbColor: MaterialStateProperty.all(Color.fromARGB(255, 17, 125, 104)),
+            trackColor: MaterialStateProperty.all(Colors.grey[800]),
+            thickness: MaterialStateProperty.all(8),
+            radius: Radius.circular(10),
+          ),
         ),
         debugShowCheckedModeBanner: false,
-        home: const OptionsTabs(title: 'Football Funko Store'),
+        home: const OptionsTabs(title: 'Tienda de Funkos'),
       ),
     );
   }

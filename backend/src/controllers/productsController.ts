@@ -27,7 +27,7 @@ class ProductsController{
   
   public async update(req: Request, res: Response): Promise<void> {
     const { id } = req.params;
-    console.log(req.params);
+    console.log(req.params, req.body);
     const resp = await pool.query("UPDATE productos set ? WHERE productos.id = ?", [req.body, id]);
     //req.body;
     res.json(resp);

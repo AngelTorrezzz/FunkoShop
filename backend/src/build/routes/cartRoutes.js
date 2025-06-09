@@ -4,16 +4,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const loginController_1 = __importDefault(require("../controllers/loginController"));
-class LoginRoutes {
+const cartController_1 = __importDefault(require("../controllers/cartController"));
+class CartRoutes {
     constructor() {
         this.router = (0, express_1.Router)();
         this.config();
     }
     config() {
         //Endpoints Personalizados
-        this.router.post('/listOne', loginController_1.default.listOne);
+        this.router.put('/purchase', cartController_1.default.purchase);
     }
 }
-const loginRoutes = new LoginRoutes();
-exports.default = loginRoutes.router;
+const cartRoutes = new CartRoutes();
+exports.default = cartRoutes.router;

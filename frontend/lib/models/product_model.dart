@@ -5,6 +5,7 @@ class ProductModel {
   String club;
   int quantity;
   String imageURL;
+  int isFavorite = 0;
 
   ProductModel({
     required this.id,
@@ -13,6 +14,7 @@ class ProductModel {
     required this.club,
     required this.quantity,
     required this.imageURL,
+    required this.isFavorite,
   });
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
@@ -23,6 +25,7 @@ class ProductModel {
       club: json['club'],
       quantity: json['quantity'],
       imageURL: json['imageURL'],
+      isFavorite: json['isFavorite'] ?? 0,
     );
   }
 
@@ -34,12 +37,13 @@ class ProductModel {
       'club': club,
       'quantity': quantity,
       'imageURL': imageURL,
+      'isFavorite': isFavorite,
     };
   }
 
   @override
   String toString() {
-    return 'ProductModel{id: $id, name: $name, price: $price, club: $club, quantity: $quantity, imageURL: $imageURL}';
+    return 'ProductModel{id: $id, name: $name, price: $price, club: $club, quantity: $quantity, imageURL: $imageURL, isFavorite: $isFavorite}';
   }
 
 }

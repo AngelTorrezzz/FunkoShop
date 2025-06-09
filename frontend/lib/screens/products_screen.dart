@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:ventas_app/providers/cart_provider.dart';
 import 'package:ventas_app/providers/product_provider.dart';
-import 'package:ventas_app/screens/product_screen.dart';
+import 'package:ventas_app/screens/product_details_screen.dart';
 
 class ProductsScreen extends StatelessWidget {
   const ProductsScreen({super.key});
@@ -114,16 +115,15 @@ class ProductsScreen extends StatelessWidget {
   }
 
   Widget _productsCard(BuildContext context, dynamic product) {
-    //final colors = Theme.of(context).colorScheme;
-    //final cartProvider = Provider.of<CartProvider>(context);
-    //final quantity = cartProvider.getQuantity(product);
+    final cartProvider = Provider.of<CartProvider>(context);
+    final quantity = cartProvider.getQuantity(product);
 
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => Product(productData: product),
+            builder: (context) => ProductDetails(productData: product),
           ),
         );
       },
@@ -133,14 +133,10 @@ class ProductsScreen extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
-          margin: const EdgeInsets.only(bottom: 0),
           elevation: 5,
-          // El ClipBehavior ayuda a evitar que el contenido se desborde del Card
           clipBehavior: Clip.antiAlias,
-          color: Color.fromARGB(255, 204, 209, 209), // Color del Card
+          color: Color.fromARGB(255, 204, 209, 209),
           child: Column(
-            //crossAxisAlignment sirve para alinear los hijos en el eje transversal
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Image.network(
                 product.imageURL,
@@ -158,35 +154,72 @@ class ProductsScreen extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.all(12.0),
-                child: Column(
+                child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      product.name,
-                      style: GoogleFonts.fredoka(fontSize: 32, fontWeight: FontWeight.w400, color: const Color.fromARGB(255, 0, 0, 0))
+                    // Info del producto (izquierda)
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            product.name,
+                            style: GoogleFonts.fredoka(fontSize: 24, fontWeight: FontWeight.w500, color: Theme.of(context).colorScheme.primary),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            'Club: ${product.club}',
+                            style: GoogleFonts.fredoka(fontSize: 16, color: Colors.black),
+                          ),
+                          const SizedBox(height: 6),
+                          Text(
+                            '\$${product.price}',
+                            style: GoogleFonts.fredoka(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.black),
+                          ),
+                          const SizedBox(height: 5),
+                          Text(
+                            'Disponibles: ${product.quantity}',
+                            style: GoogleFonts.fredoka(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.black),
+                          ),
+                        ],
+                      ),
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'Club: ${product.club}',
-                      style: GoogleFonts.fredoka(fontSize: 18, fontWeight: FontWeight.w400, color: const Color.fromARGB(255, 0, 0, 0))
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      '\$${product.price}',
-                      style: GoogleFonts.fredoka(fontSize: 20, fontWeight: FontWeight.w500, color: Theme.of(context).colorScheme.primary),
-                    ),
-                    const SizedBox(height: 5),
-                    Text(
-                      'Cantidad: ${product.quantity}',
-                      style: GoogleFonts.fredoka(fontSize: 18, fontWeight: FontWeight.w600, color: const Color.fromARGB(255, 0, 0, 0)),
+                    // Botón de agregar al carrito (derecha)
+                    Padding(
+                      padding: const EdgeInsets.only(right: 20.0, top: 35.0),
+                      child: Row(
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.remove, color: Colors.black, size: 30),
+                            onPressed: () {
+                              Provider.of<CartProvider>(context, listen: false).removeFromCart(product);
+                              if (quantity != 0) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text('Un ${product.name} eliminado del carrito'), duration: Duration(milliseconds: 400)),
+                                );
+                              } 
+                            },
+                          ),
+                          Text(quantity.toString(), style: GoogleFonts.fredoka(fontSize: 25, fontWeight: FontWeight.w400, color: Colors.black)),
+                          IconButton(
+                            icon: const Icon(Icons.add, color: Colors.black, size: 30),
+                            onPressed: () {
+                              Provider.of<CartProvider>(context, listen: false).addToCart(product);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('Un ${product.name} añadido al carrito'), duration: Duration(milliseconds: 400)),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
               ),
             ],
           ),
-        )
-      ) 
+        ),
+      ), 
     );
   }
 }

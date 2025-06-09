@@ -32,14 +32,18 @@ class ProductProvider with ChangeNotifier {
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
-        print('Response: ${response.body}');
+        //print('Response: ${response.body}');
 
         final data = jsonDecode(response.body);
 
         products = List<ProductModel>.from(
           data.map((product) => ProductModel.fromJson(product)),
         );
-        
+
+        favoritesProducts = products.where((product) => product.isFavorite == 1).toList();
+
+        //print('products: $products');
+        //print('favoritesProducts: $favoritesProducts');
       } else {
         products = [];
       }
@@ -52,33 +56,29 @@ class ProductProvider with ChangeNotifier {
     }
   }
 
-  Future<void> toggleFavoriteProducts(ProductModel product) async {
-    final isFavorite = favoritesProducts.contains(product);
+  Future<void> toggleFavoriteProduct(ProductModel product) async {
+    final isFavorite = favoritesProducts.any((p) => p.id == product.id);
 
     try {
-      final url = Uri.parse('${getBaseUrl()}/api/favorites');
-      final response = 
-          isFavorite
-              ? await http.delete(url, body: jsonEncode({'id': product.id}))
-              : await http.post(url, body: json.encode(product.toJson()));
-            
-      if (response.statusCode == 200) {
-        if (isFavorite) {
-          favoritesProducts.remove(product);
-        } else {
-          favoritesProducts.add(product);
-        }
+      final url = Uri.parse('${getBaseUrl()}/api/products/update/${product.id}');
 
-        notifyListeners();
+      final http.Response response;
+      if (isFavorite) {
+        response = await http.put(url, body: jsonEncode({'id': product.id, 'isFavorite': 0}), headers: {'Content-Type': 'application/json'});
+      } else {
+        response = await http.put(url, body: jsonEncode({'id': product.id, 'isFavorite': 1}), headers: {'Content-Type': 'application/json'});
+      }
+
+      if (response.statusCode == 200) {
+        await getProducts(); // Refresh the product list
 
       } else {
         throw Exception('Failed to toggle favorite status');
       }
 
-      notifyListeners();
-
     } catch (e) {
       print('Error toggling favorite status: $e');
+    } finally {
       notifyListeners();
     }
   }

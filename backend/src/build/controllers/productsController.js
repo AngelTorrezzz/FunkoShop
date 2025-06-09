@@ -41,7 +41,7 @@ class ProductsController {
     update(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
-            console.log(req.params);
+            console.log(req.params, req.body);
             const resp = yield database_1.default.query("UPDATE productos set ? WHERE productos.id = ?", [req.body, id]);
             //req.body;
             res.json(resp);

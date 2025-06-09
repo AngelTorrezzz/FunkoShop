@@ -3,7 +3,8 @@ import morgan from 'morgan';
 import cors from 'cors';
 
 import productsRoutes from './routes/productsRoutes';
-
+import loginRoutes from './routes/loginRoutes';
+import cartRoutes from './routes/cartRoutes';
 
 class Server {
   public app: Application;
@@ -23,6 +24,8 @@ class Server {
 
   routes (): void {
     this.app.use('/api/products', productsRoutes);
+    this.app.use('/api/login', loginRoutes);
+    this.app.use('/api/cart', cartRoutes);
   }
 
   start (): void {
