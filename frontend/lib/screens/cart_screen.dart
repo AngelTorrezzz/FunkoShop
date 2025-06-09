@@ -8,22 +8,24 @@ import 'package:ventas_app/screens/products_screen.dart';
 import 'package:ventas_app/providers/product_provider.dart';
 
 
-class CartScreen extends StatelessWidget {
+class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
 
+  @override
+  State<CartScreen> createState() => _CartScreenState();
+}
+
+class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(
       context,
-      listen: false,
     );
     final userProvider = Provider.of<UserProvider>(
       context,
-      listen: false,
     );
     final productProvider = Provider.of<ProductProvider>(
       context,
-      listen: false,
     );
 
     final items = cartProvider.items;
@@ -32,7 +34,7 @@ class CartScreen extends StatelessWidget {
     return Scaffold(
       body: items.isEmpty
           ? Center(child: Text(
-            "Tu carrito está vacío.",
+            "Carrito vacío",
             style: GoogleFonts.fredoka(fontSize: 32, color: Colors.black)
           ))
           : ListView.builder(
@@ -102,10 +104,7 @@ class CartScreen extends StatelessWidget {
             children: [
               Text(
                 "Total a pagar: \$${cartProvider.totalPrice.toStringAsFixed(2)}",
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: GoogleFonts.fredoka(fontSize: 16, fontWeight: FontWeight.w400, color: const Color.fromARGB(255, 0, 0, 0)),
               ),
               const SizedBox(height: 10),
               SizedBox(
@@ -116,7 +115,10 @@ class CartScreen extends StatelessWidget {
                     if (userProvider.isUserLoggedIn() == 0) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: const Text("Debes iniciar sesión para comprar."),
+                          content: Text(
+                            "Debes iniciar sesión para comprar.",
+                            style: GoogleFonts.fredoka(fontSize: 16, fontWeight: FontWeight.w400, color: const Color.fromARGB(255, 255, 255, 255)),
+                          ),
                           backgroundColor: Theme.of(context).colorScheme.primary,
                           duration: const Duration(milliseconds: 1000),
                         ),
@@ -137,21 +139,21 @@ class CartScreen extends StatelessWidget {
                         cartProvider.clearCart();
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: const Text("¡Compra realizada con éxito!"),
+                            content: Text(
+                              "¡Compra realizada con éxito!",
+                              style: GoogleFonts.fredoka(fontSize: 16, fontWeight: FontWeight.w400, color: const Color.fromARGB(255, 255, 255, 255)),
+                            ),
                             backgroundColor: Theme.of(context).colorScheme.primary,
                             duration: const Duration(milliseconds: 1750),
-                          ),
-                        );
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const ProductsScreen(),
                           ),
                         );
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: const Text("Error al realizar la compra."),
+                            content: Text(
+                              "Error al realizar la compra.",
+                              style: GoogleFonts.fredoka(fontSize: 16, fontWeight: FontWeight.w400, color: const Color.fromARGB(255, 255, 255, 255)),
+                            ),
                             backgroundColor: Theme.of(context).colorScheme.error,
                             duration: const Duration(milliseconds: 1750),
                           ),
@@ -166,12 +168,9 @@ class CartScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  child: const Text(
+                  child: Text(
                     "Comprar",
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white,
-                    ),
+                    style: GoogleFonts.fredoka(fontSize: 16, fontWeight: FontWeight.w400, color: const Color.fromARGB(255, 255, 255, 255)),
                   ),
                 ),
               ),

@@ -89,7 +89,7 @@ class _ProductDetailsState extends State<ProductDetails> {
               padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
               child: Image.network(
                 widget.productData.imageURL,
-                height: 550,
+                height: 425,
                 width: double.infinity,
                 fit: BoxFit.contain,
                 errorBuilder: (context, error, stackTrace) {

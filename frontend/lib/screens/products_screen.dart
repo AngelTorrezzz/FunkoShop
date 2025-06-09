@@ -195,9 +195,12 @@ class ProductsScreen extends StatelessWidget {
                               Provider.of<CartProvider>(context, listen: false).removeFromCart(product);
                               if (quantity != 0) {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text('Un ${product.name} eliminado del carrito'), duration: Duration(milliseconds: 400)),
+                                  SnackBar(content: Text(
+                                    'Un ${product.name} eliminado del carrito',
+                                    style: GoogleFonts.fredoka(fontSize: 16, fontWeight: FontWeight.w400, color: const Color.fromARGB(255, 255, 255, 255)),
+                                  ), duration: Duration(milliseconds: 400)),
                                 );
-                              } 
+                              }
                             },
                           ),
                           Text(quantity.toString(), style: GoogleFonts.fredoka(fontSize: 25, fontWeight: FontWeight.w400, color: Colors.black)),
@@ -205,9 +208,17 @@ class ProductsScreen extends StatelessWidget {
                             icon: const Icon(Icons.add, color: Colors.black, size: 30),
                             onPressed: () {
                               Provider.of<CartProvider>(context, listen: false).addToCart(product);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('Un ${product.name} añadido al carrito'), duration: Duration(milliseconds: 400)),
-                              );
+                              if (quantity < product.quantity) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'Un ${product.name} añadido al carrito',
+                                      style: GoogleFonts.fredoka(fontSize: 16, fontWeight: FontWeight.w400, color: const Color.fromARGB(255, 255, 255, 255)),
+                                    ),
+                                    duration: Duration(milliseconds: 400),
+                                  ),
+                                );
+                              }
                             },
                           ),
                         ],

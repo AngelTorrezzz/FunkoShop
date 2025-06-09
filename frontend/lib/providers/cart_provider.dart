@@ -17,7 +17,7 @@ class CartProvider with ChangeNotifier {
     if (kIsWeb) {
       return 'http://localhost:3000';
     } else if (Platform.isAndroid) {
-      return 'http://10.0.2.2:3000';
+      return 'http://192.168.137.168:3000';
     } else if (Platform.isIOS) {
       return 'http://localhost:3000';
     } else {
@@ -86,7 +86,7 @@ class CartProvider with ChangeNotifier {
 
     final url = Uri.parse('${getBaseUrl()}/api/cart/purchase');
 
-    print('items: $_items');
+    //print('items: $_items');
 
     try {
       final response = await http.put(

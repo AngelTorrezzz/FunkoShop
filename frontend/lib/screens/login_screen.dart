@@ -28,10 +28,19 @@ class _LoginScreenState extends State<LoginScreen> {
     final userProvider = Provider.of<UserProvider>(context);
 
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 93, 109, 126), // Fondo gener
       appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
         title: Text(
-          "Iniciar Sesión",
-          style: GoogleFonts.fredoka(fontSize: 16, color: Colors.black),
+          'Iniciar Sesión',
+          style: GoogleFonts.fredoka(fontSize: 30, fontWeight: FontWeight.w400, color: Colors.white),
+        ),
+        leading: IconButton(
+          color: Colors.white,
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(Icons.arrow_back),
         ),
       ),
       body: Card(
@@ -66,16 +75,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   if (!context.mounted) return;
         
                   if (success) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const CartScreen(),
-                      ),
-                    );
+                    Navigator.pop(context);
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: const Text("Error al iniciar sesión"),
+                        content: Text(
+                          "Error al iniciar sesión",
+                          style: GoogleFonts.fredoka(fontSize: 16, fontWeight: FontWeight.w400, color: const Color.fromARGB(255, 255, 255, 255)),
+                        ),
                         backgroundColor: Colors.red,
                         duration: const Duration(milliseconds: 1750),
                       ),
