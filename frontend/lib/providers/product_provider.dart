@@ -9,6 +9,7 @@ class ProductProvider with ChangeNotifier {
 
   List<ProductModel> products = [];
   List<ProductModel> favoritesProducts = [];
+  List<String> mediaURLs = [];
 
   String getBaseUrl() {
     if (kIsWeb) {
@@ -28,8 +29,15 @@ class ProductProvider with ChangeNotifier {
 
     final url = Uri.parse('${getBaseUrl()}/api/products');
 
+    // Prueba de obtener media URLs
+    //final url2 = Uri.parse('${getBaseUrl()}/api/products/getMediaURLs/1');
+
     try {
       final response = await http.get(url);
+
+      //Prueba de obtener arreglo de media URLs
+      //final response2 = await http.get(url2);
+      //print('response2: ${response2.body}');
 
       if (response.statusCode == 200) {
         //print('Response: ${response.body}');
@@ -81,6 +89,32 @@ class ProductProvider with ChangeNotifier {
     } finally {
       notifyListeners();
     }
+  }
+
+  Future<List<String>> getMediaURLs(int productId) async {
+    isLoading = true;
+
+    final url = Uri.parse('${getBaseUrl()}/api/products/getMediaURLs/$productId');
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(response.body);
+        mediaURLs = List<String>.from(data.map((item) => item['mediaURL']));
+
+        print('response.body: ${response.body}');
+        print('Media URLs: $mediaURLs');
+      } else {
+        mediaURLs = [];
+      }
+    } catch (e) {
+      print('Error fetching media URLs: $e');
+      mediaURLs = [];
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+
+    return mediaURLs;
   }
 
 }
