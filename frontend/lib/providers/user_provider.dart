@@ -13,11 +13,13 @@ class UserProvider with ChangeNotifier {
   bool isLoading = false;
   int isLoggedIn = 0;
   String getBaseUrl() {
+    //return 'http://192.168.137.168:3000';
+    
     if (kIsWeb) {
       return 'http://localhost:3000';
     } else if (Platform.isAndroid) {
       //return 'http://192.168.137.168:3000';
-      return 'http://192.168.137.1:3000';
+      return 'http://192.168.137.168:3000';
     } else if (Platform.isIOS) {
       return 'http://localhost:3000';
     } else {

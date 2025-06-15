@@ -12,6 +12,8 @@ class ProductProvider with ChangeNotifier {
   List<String> mediaURLs = [];
 
   String getBaseUrl() {
+    //return 'http://192.168.137.168:3000';
+
     if (kIsWeb) {
       return 'http://localhost:3000';
     } else if (Platform.isAndroid) {

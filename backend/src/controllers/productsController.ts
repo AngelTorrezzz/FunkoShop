@@ -5,6 +5,7 @@ class ProductsController{
   //CRUD
   public async list(req: Request, res: Response ): Promise<void>{
     const respuesta = await pool.query('SELECT * FROM productos');
+
     res.json(respuesta);
   }
   
@@ -37,6 +38,18 @@ class ProductsController{
     const { id } = req.params;
     const resp = await pool.query(`DELETE FROM productos WHERE productos.id = ${id}`);
     res.json(resp);
+  }
+
+  public async getMediaURLs(req: Request, res: Response): Promise<void> {
+    const { id } = req.params;
+    const respuesta = await pool.query('SELECT mediaURL FROM media_productos WHERE media_productos.id_producto = ?', [id]);
+    
+    if(respuesta.length > 0){
+      res.json(respuesta);
+      return;
+    }
+
+    res.status(404).json({'mensaje': 'No hay medios asociados a este producto'});
   }
 }
 

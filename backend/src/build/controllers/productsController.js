@@ -54,6 +54,17 @@ class ProductsController {
             res.json(resp);
         });
     }
+    getMediaURLs(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { id } = req.params;
+            const respuesta = yield database_1.default.query('SELECT mediaURL FROM media_productos WHERE media_productos.id_producto = ?', [id]);
+            if (respuesta.length > 0) {
+                res.json(respuesta);
+                return;
+            }
+            res.status(404).json({ 'mensaje': 'No hay medios asociados a este producto' });
+        });
+    }
 }
 const productsController = new ProductsController();
 exports.default = productsController;

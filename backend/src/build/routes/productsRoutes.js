@@ -26,6 +26,7 @@ class ProductsRoutes {
         this.router.put('/update/:id', productsController_1.default.update);
         this.router.delete('/delete/:id', productsController_1.default.delete);
         //Endpoints Personalizados
+        this.router.get('/getMediaURLs/:id', productsController_1.default.getMediaURLs);
     }
 }
 const productsRoutes = new ProductsRoutes();

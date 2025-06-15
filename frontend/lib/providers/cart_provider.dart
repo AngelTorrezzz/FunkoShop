@@ -14,6 +14,8 @@ class CartProvider with ChangeNotifier {
   int get totalItems => _items.values.fold(0, (sum, quantity) => sum + quantity);
 
   String getBaseUrl() {
+    //return 'http://192.168.137.168:3000';
+
     if (kIsWeb) {
       return 'http://localhost:3000';
     } else if (Platform.isAndroid) {

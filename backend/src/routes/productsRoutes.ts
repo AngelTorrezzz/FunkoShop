@@ -29,7 +29,7 @@ class ProductsRoutes {
     this.router.delete('/delete/:id', productsController.delete);
 
     //Endpoints Personalizados
-    
+    this.router.get('/getMediaURLs/:id', productsController.getMediaURLs);
   }
 }
 
